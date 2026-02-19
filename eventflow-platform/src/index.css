@@ -1,0 +1,389 @@
+@import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700;800&display=swap');
+
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* Antarestar Event Platform Design System
+   A bold, sporty aesthetic inspired by race event websites
+   Updated to Light Theme (Antarestar Brand)
+*/
+
+@layer base {
+  :root {
+    /* Light Mode (Default) - Antarestar Brand */
+    --background: 0 0% 100%;
+    --foreground: 222 47% 11%;
+    /* Navy Text - High Contrast */
+
+    /* Cards */
+    --card: 0 0% 100%;
+    --card-foreground: 222 47% 11%;
+
+    --popover: 0 0% 100%;
+    --popover-foreground: 222 47% 11%;
+
+    /* Primary - Vibrant Orange (Brand) */
+    --primary: 24 95% 53%;
+    --primary-foreground: 0 0% 100%;
+
+    /* Secondary - Gold/Yellow (Brand Accent) */
+    --secondary: 45 93% 47%;
+    --secondary-foreground: 222 47% 11%;
+
+    /* Muted/Neutral */
+    --muted: 210 40% 96.1%;
+    --muted-foreground: 215 16% 40%;
+    /* Darker gray for better readability */
+
+    /* Accent - Dark Navy for contrast elements */
+    --accent: 222 47% 11%;
+    --accent-foreground: 0 0% 98%;
+
+    /* Status Colors */
+    --success: 142 76% 36%;
+    --success-foreground: 0 0% 100%;
+
+    --warning: 38 92% 50%;
+    --warning-foreground: 222 47% 11%;
+
+    --destructive: 0 84% 60%;
+    --destructive-foreground: 0 0% 100%;
+
+    --border: 214 32% 91%;
+    --input: 214 32% 91%;
+    --ring: 24 95% 53%;
+
+    --radius: 0.5rem;
+    /* Slightly tighter radius for sporty look */
+
+    /* Gradients */
+    /* Gradients */
+    --gradient-primary: linear-gradient(135deg, hsl(24 95% 53%) 0%, hsl(12 90% 55%) 100%);
+    --gradient-hero: linear-gradient(180deg, transparent 0%, hsl(222 47% 11% / 0.7) 100%);
+    /* Darker overlay for text visibility */
+    --gradient-card: linear-gradient(180deg, hsl(0 0% 100%) 0%, hsl(0 0% 98%) 100%);
+    --gradient-blue: linear-gradient(135deg, hsl(222 47% 11%) 0%, hsl(222 47% 20%) 100%);
+
+    /* Shadows */
+    --shadow-glow: 0 0 20px hsl(24 95% 53% / 0.2);
+    --shadow-card: 0 4px 6px -1px hsl(0 0% 0% / 0.1), 0 2px 4px -2px hsl(0 0% 0% / 0.1);
+    --shadow-elevated: 0 20px 25px -5px hsl(0 0% 0% / 0.1), 0 8px 10px -6px hsl(0 0% 0% / 0.1);
+
+    /* Sidebar - Keep Dark for contrast */
+    --sidebar-background: 222 47% 11%;
+    --sidebar-foreground: 210 40% 98%;
+    --sidebar-primary: 24 95% 53%;
+    --sidebar-primary-foreground: 222 47% 11%;
+    --sidebar-accent: 222 47% 18%;
+    --sidebar-accent-foreground: 210 40% 98%;
+    --sidebar-border: 217 33% 20%;
+    --sidebar-ring: 24 95% 53%;
+  }
+
+  .dark {
+    /* Updates for Better Dark Mode Visibility */
+    --background: 222 47% 11%;
+    --foreground: 210 40% 98%;
+
+    --card: 222 47% 13%;
+    /* Slightly lighter than background */
+    --card-foreground: 210 40% 98%;
+
+    --popover: 222 47% 13%;
+    --popover-foreground: 210 40% 98%;
+
+    --primary: 24 95% 53%;
+    --primary-foreground: 222 47% 11%;
+
+    --secondary: 45 93% 47%;
+    --secondary-foreground: 222 47% 11%;
+
+    --muted: 217 33% 17%;
+    --muted-foreground: 215 20% 75%;
+    /* Lighter gray for readability */
+
+    --accent: 217 33% 17%;
+    --accent-foreground: 210 40% 98%;
+
+    --success: 142 76% 36%;
+    --success-foreground: 210 40% 98%;
+
+    --warning: 38 92% 50%;
+    --warning-foreground: 222 47% 11%;
+
+    --destructive: 0 62% 30%;
+    --destructive-foreground: 210 40% 98%;
+
+    --border: 217 33% 20%;
+    --input: 217 33% 20%;
+    --ring: 24 95% 53%;
+
+    /* Sidebar re-uses same variables in dark mode, but let's be explicit if needed */
+    --sidebar-background: 222 47% 8%;
+    /* Even darker for sidebar */
+    --sidebar-foreground: 210 40% 98%;
+    --sidebar-primary: 24 95% 53%;
+    --sidebar-primary-foreground: 222 47% 11%;
+    --sidebar-accent: 222 47% 15%;
+    --sidebar-accent-foreground: 210 40% 98%;
+    --sidebar-border: 217 33% 20%;
+    --sidebar-ring: 24 95% 53%;
+
+    /* Dark Mode Gradients */
+    --gradient-card: linear-gradient(180deg, hsl(222 47% 16%) 0%, hsl(222 47% 13%) 100%);
+    --gradient-hero: linear-gradient(180deg, transparent 0%, hsl(222 47% 11% / 0.9) 100%);
+  }
+}
+
+@layer base {
+  * {
+    @apply border-border;
+  }
+
+  body {
+    @apply bg-background text-foreground antialiased;
+    font-family: 'Montserrat', sans-serif;
+    /* Applied globally as requested */
+  }
+
+  h1,
+  h2,
+  h3,
+  h4,
+  h5,
+  h6 {
+    @apply font-bold uppercase tracking-tight;
+    /* Montserrat already supports bold/headings well */
+  }
+}
+
+@layer components {
+
+  /* Hero button with gradient and glow */
+  .btn-hero {
+    @apply relative overflow-hidden px-8 py-4 text-lg font-bold uppercase tracking-wider;
+    background: var(--gradient-primary);
+    box-shadow: var(--shadow-glow);
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  }
+
+  .btn-hero:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 0 60px hsl(24 95% 53% / 0.5);
+  }
+
+  /* Event card styling */
+  .event-card {
+    @apply relative overflow-hidden rounded-xl border border-border;
+    background: var(--gradient-card);
+    box-shadow: var(--shadow-card);
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  }
+
+  .event-card:hover {
+    transform: translateY(-4px);
+    box-shadow: var(--shadow-elevated);
+    border-color: hsl(var(--primary) / 0.5);
+  }
+
+  /* Badge styles */
+  .badge-category {
+    @apply inline-flex items-center px-3 py-1 text-xs font-semibold uppercase tracking-wider rounded-full;
+    background: hsl(var(--secondary) / 0.2);
+    color: hsl(var(--secondary));
+  }
+
+  .badge-status {
+    @apply inline-flex items-center px-3 py-1 text-xs font-semibold uppercase tracking-wider rounded-full;
+  }
+
+  .badge-status.open {
+    background: hsl(var(--success) / 0.2);
+    color: hsl(var(--success));
+  }
+
+  .badge-status.closed {
+    background: hsl(var(--destructive) / 0.2);
+    color: hsl(var(--destructive));
+  }
+
+  .badge-status.soon {
+    background: hsl(var(--warning) / 0.2);
+    color: hsl(var(--warning));
+  }
+
+  /* Glass effect */
+  .glass {
+    @apply backdrop-blur-xl border border-border/50;
+    background: hsl(var(--card) / 0.8);
+  }
+
+  /* Stats card */
+  .stat-card {
+    @apply relative p-6 rounded-xl overflow-hidden;
+    background: var(--gradient-card);
+    border: 1px solid hsl(var(--border));
+  }
+
+  .stat-card::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 2px;
+    background: var(--gradient-primary);
+  }
+
+  /* Countdown styling */
+  .countdown-box {
+    @apply flex flex-col items-center justify-center p-4 rounded-lg;
+    background: hsl(var(--muted));
+    min-width: 80px;
+  }
+
+  .countdown-value {
+    @apply text-3xl font-bold;
+    font-family: 'Bebas Neue', sans-serif;
+    color: hsl(var(--primary));
+  }
+
+  .countdown-label {
+    @apply text-xs uppercase tracking-wider;
+    color: hsl(var(--muted-foreground));
+  }
+
+  /* Section headers */
+  .section-header {
+    @apply relative inline-block;
+  }
+
+  .section-header::after {
+    content: '';
+    position: absolute;
+    bottom: -8px;
+    left: 0;
+    width: 60px;
+    height: 4px;
+    background: var(--gradient-primary);
+    border-radius: 2px;
+  }
+
+  /* Animated gradient border */
+  .gradient-border {
+    @apply relative rounded-xl overflow-hidden;
+  }
+
+  .gradient-border::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    padding: 2px;
+    background: var(--gradient-primary);
+    -webkit-mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
+    -webkit-mask-composite: xor;
+    mask-composite: exclude;
+    border-radius: inherit;
+    pointer-events: none;
+  }
+}
+
+@layer utilities {
+
+  /* Text gradient */
+  .text-gradient {
+    background: var(--gradient-primary);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+  }
+
+  .text-gradient-blue {
+    background: var(--gradient-blue);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+  }
+
+  /* Fade in animation */
+  .animate-fade-in {
+    animation: fadeIn 0.5s ease-out forwards;
+  }
+
+  @keyframes fadeIn {
+    from {
+      opacity: 0;
+      transform: translateY(20px);
+    }
+
+    to {
+      opacity: 1;
+      transform: translateY(0);
+    }
+  }
+
+  /* Slide up animation */
+  .animate-slide-up {
+    animation: slideUp 0.6s ease-out forwards;
+  }
+
+  @keyframes slideUp {
+    from {
+      opacity: 0;
+      transform: translateY(40px);
+    }
+
+    to {
+      opacity: 1;
+      transform: translateY(0);
+    }
+  }
+
+  /* Pulse glow */
+  .animate-pulse-glow {
+    animation: pulseGlow 2s ease-in-out infinite;
+  }
+
+  @keyframes pulseGlow {
+
+    0%,
+    100% {
+      box-shadow: 0 0 20px hsl(24 95% 53% / 0.3);
+    }
+
+    50% {
+      box-shadow: 0 0 40px hsl(24 95% 53% / 0.6);
+    }
+  }
+
+  /* Stagger children animation */
+  .stagger-children>* {
+    opacity: 0;
+    animation: fadeIn 0.5s ease-out forwards;
+  }
+
+  .stagger-children>*:nth-child(1) {
+    animation-delay: 0.1s;
+  }
+
+  .stagger-children>*:nth-child(2) {
+    animation-delay: 0.2s;
+  }
+
+  .stagger-children>*:nth-child(3) {
+    animation-delay: 0.3s;
+  }
+
+  .stagger-children>*:nth-child(4) {
+    animation-delay: 0.4s;
+  }
+
+  .stagger-children>*:nth-child(5) {
+    animation-delay: 0.5s;
+  }
+
+  .stagger-children>*:nth-child(6) {
+    animation-delay: 0.6s;
+  }
+}
