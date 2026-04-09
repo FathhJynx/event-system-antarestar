@@ -3,6 +3,19 @@ import api from "@/lib/api";
 import { Booking } from "./useBookings";
 import { EventWithDetails } from "./useEvents";
 
+export interface OrganizerUpcomingEvent {
+    id: string | number;
+    name: string;
+    title?: string;
+    slug: string;
+    date: string | null;
+    registered: number;
+    quota: number;
+    registered_count?: number;
+    max_participants?: number | null;
+    venues?: EventWithDetails["venues"];
+}
+
 export const useOrganizerStats = () => {
     return useQuery({
         queryKey: ["organizer", "stats"],
@@ -35,7 +48,7 @@ export const useOrganizerUpcomingEvents = () => {
         queryKey: ["organizer", "upcoming-events"],
         queryFn: async () => {
             const response = await api.get("/organizer/upcoming-events");
-            return response.data as any[];
+            return response.data as OrganizerUpcomingEvent[];
         },
     });
 };

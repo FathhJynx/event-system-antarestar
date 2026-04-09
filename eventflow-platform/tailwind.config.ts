@@ -15,8 +15,9 @@ export default {
     },
     extend: {
       fontFamily: {
-        display: ['"Bebas Neue"', 'sans-serif'],
-        body: ['Inter', 'sans-serif'],
+        display: ['"Bebas Neue"', '"Montserrat"', 'sans-serif'],
+        sans: ['Inter', 'sans-serif'],
+        serif: ['"Playfair Display"', 'serif'],
       },
       colors: {
         border: "hsl(var(--border))",
@@ -75,6 +76,17 @@ export default {
         lg: "var(--radius)",
         md: "calc(var(--radius) - 2px)",
         sm: "calc(var(--radius) - 4px)",
+      },
+      borderWidth: {
+        '3': '3px',
+        '4': '4px',
+        '5': '5px',
+      },
+      boxShadow: {
+        'neo': '4px 4px 0px 0px hsl(var(--foreground))',
+        'neo-hover': '6px 6px 0px 0px hsl(var(--foreground))',
+        'neo-sm': '2px 2px 0px 0px hsl(var(--foreground))',
+        'neo-lg': '8px 8px 0px 0px hsl(var(--foreground))',
       },
       keyframes: {
         "accordion-down": {

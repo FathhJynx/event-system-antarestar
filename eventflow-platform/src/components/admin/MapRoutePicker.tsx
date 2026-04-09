@@ -8,7 +8,7 @@ import { Search, MapPin, Trash2, GripVertical } from "lucide-react";
 import { Badge } from "@/components/ui/badge";
 
 // Fix for default marker icon in Leaflet + React
-// @ts-ignore
+// @ts-expect-error Leaflet defines this internal helper at runtime but omits it from the type surface.
 delete L.Icon.Default.prototype._getIconUrl;
 L.Icon.Default.mergeOptions({
     iconRetinaUrl: "https://unpkg.com/leaflet@1.7.1/dist/images/marker-icon-2x.png",
@@ -80,7 +80,7 @@ const MapRoutePicker = ({ value, onChange }: MapRoutePickerProps) => {
         if (!searchQuery) return;
         try {
             const response = await fetch(`https://nominatim.openstreetmap.org/search?format=json&q=${encodeURIComponent(searchQuery)}`);
-            const data = await response.json();
+            const data = await response.json() as Array<{ lat: string; lon: string }>;
             if (data && data.length > 0) {
                 const { lat, lon } = data[0];
                 setMapCenter([parseFloat(lat), parseFloat(lon)]);

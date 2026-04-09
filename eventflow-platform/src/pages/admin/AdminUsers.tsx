@@ -46,6 +46,13 @@ const roleColors = {
     participant: "bg-success/20 text-success border-success/20",
 };
 
+type UserFormData = {
+    name: string;
+    email: string;
+    role: User["role"];
+    password: string;
+};
+
 const AdminUsers = () => {
     const [searchQuery, setSearchQuery] = useState("");
     const [deleteId, setDeleteId] = useState<string | null>(null);
@@ -57,7 +64,7 @@ const AdminUsers = () => {
 
     const [isDialogOpen, setIsDialogOpen] = useState(false);
     const [editingUser, setEditingUser] = useState<User | null>(null);
-    const [formData, setFormData] = useState({
+    const [formData, setFormData] = useState<UserFormData>({
         name: "",
         email: "",
         role: "participant" as User["role"],
@@ -94,7 +101,7 @@ const AdminUsers = () => {
         e.preventDefault();
         try {
             if (editingUser) {
-                const updateData: any = { ...formData };
+                const updateData: UserFormData & { password?: string } = { ...formData };
                 if (!updateData.password) delete updateData.password;
 
                 await updateUserMut.mutateAsync({ id: editingUser.id.toString(), ...updateData });

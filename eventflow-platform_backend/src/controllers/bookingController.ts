@@ -45,7 +45,7 @@ export const midtransNotification = async (req: Request, res: Response) => {
 
 export const verifyBookingStatus = async (req: Request, res: Response) => {
     try {
-        const { id } = req.params;
+        const id = Array.isArray(req.params.id) ? req.params.id[0] : req.params.id;
         const booking = await bookingService.verifyPaymentStatus(id);
         res.json({ message: 'Status updated', booking });
     } catch (error: any) {

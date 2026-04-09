@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { motion } from "framer-motion";
-import { Search, ArrowLeft, Download, CheckCircle, XCircle, Users, Loader2 } from "lucide-react";
+import { Search, ArrowLeft, Download, CheckCircle, XCircle, Users } from "lucide-react";
 import { useNavigate } from "react-router-dom";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -15,7 +15,7 @@ import {
 } from "@/components/ui/table";
 import { Badge } from "@/components/ui/badge";
 import { Skeleton } from "@/components/ui/skeleton";
-import { useEventParticipants } from "@/hooks/useEvents";
+import { useEventParticipants, type EventParticipant } from "@/hooks/useEvents";
 
 interface EventParticipantsViewProps {
     eventId: string;
@@ -30,7 +30,7 @@ const EventParticipantsView = ({ eventId, backPath }: EventParticipantsViewProps
     const participants = data?.participants || [];
     const eventTitle = data?.event_title || "Loading event...";
 
-    const filteredParticipants = participants.filter((p: any) =>
+    const filteredParticipants = participants.filter((p: EventParticipant) =>
         p.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
         p.email.toLowerCase().includes(searchQuery.toLowerCase()) ||
         p.bib_number?.toLowerCase().includes(searchQuery.toLowerCase()) ||
@@ -39,12 +39,12 @@ const EventParticipantsView = ({ eventId, backPath }: EventParticipantsViewProps
 
     const stats = {
         total: participants.length,
-        checkedIn: participants.filter((p: any) => p.is_checked_in).length,
+        checkedIn: participants.filter((p: EventParticipant) => p.is_checked_in).length,
     };
 
     const handleExport = () => {
         const headers = ["BIB Number", "Name", "Email", "Phone", "Booking Code", "Check-in Status"];
-        const csvData = participants.map((p: any) => [
+        const csvData = participants.map((p: EventParticipant) => [
             p.bib_number || "TBA",
             p.name,
             p.email,
@@ -163,7 +163,7 @@ const EventParticipantsView = ({ eventId, backPath }: EventParticipantsViewProps
                                     </TableRow>
                                 ))
                             ) : filteredParticipants.length > 0 ? (
-                                filteredParticipants.map((p: any, index: number) => (
+                                filteredParticipants.map((p: EventParticipant, index: number) => (
                                     <motion.tr
                                         key={p.id}
                                         initial={{ opacity: 0, y: 10 }}

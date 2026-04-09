@@ -3,54 +3,53 @@ import { Trophy, Mail, Phone, MapPin, Facebook, Instagram, Twitter, Youtube } fr
 
 const Footer = () => {
   return (
-    <footer className="bg-card border-t border-border">
-      <div className="container mx-auto px-4 py-12">
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
+    <footer className="bg-foreground text-background border-t-8 border-background relative">
+      <div className="container mx-auto px-4 py-20">
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-12">
           {/* Brand */}
-          <div className="space-y-4">
-            <Link to="/" className="flex items-center gap-2">
-              <div className="w-10 h-10 rounded-lg bg-primary flex items-center justify-center">
-                <Trophy className="w-6 h-6 text-primary-foreground" />
+          <div className="space-y-6">
+            <Link to="/" className="flex items-center gap-3 group">
+              <div className="w-14 h-14 bg-primary border-4 border-background flex items-center justify-center transform group-hover:rotate-12 transition-transform shadow-[4px_4px_0px_0px_hsl(var(--background))]">
+                <Trophy className="w-8 h-8 text-foreground" />
               </div>
-              <span className="font-display text-2xl tracking-wider">ANTARESTAR</span>
+              <span className="font-display text-4xl tracking-widest font-black uppercase">ANTARESTAR</span>
             </Link>
-            <p className="text-muted-foreground text-sm">
-              Your premier destination for sports events, marathons, and endurance challenges across Indonesia.
+            <p className="text-lg font-bold max-w-sm">
+              YOUR PREMIER DESTINATION FOR SPORTS EVENTS, MARATHONS, AND ENDURANCE CHALLENGES ACROSS INDONESIA.
             </p>
-            <div className="flex gap-4">
-              <a href="#" className="text-muted-foreground hover:text-primary transition-colors">
-                <Facebook className="w-5 h-5" />
+            <div className="flex gap-4 pt-2">
+              <a href="#" className="w-10 h-10 bg-background text-foreground flex items-center justify-center hover:-translate-y-1 hover:bg-primary transition-transform border-2 border-transparent">
+                <Facebook className="w-6 h-6" />
               </a>
-              <a href="#" className="text-muted-foreground hover:text-primary transition-colors">
-                <Instagram className="w-5 h-5" />
+              <a href="#" className="w-10 h-10 bg-background text-foreground flex items-center justify-center hover:-translate-y-1 hover:bg-primary transition-transform border-2 border-transparent">
+                <Instagram className="w-6 h-6" />
               </a>
-              <a href="#" className="text-muted-foreground hover:text-primary transition-colors">
-                <Twitter className="w-5 h-5" />
+              <a href="#" className="w-10 h-10 bg-background text-foreground flex items-center justify-center hover:-translate-y-1 hover:bg-primary transition-transform border-2 border-transparent">
+                <Twitter className="w-6 h-6" />
               </a>
-              <a href="#" className="text-muted-foreground hover:text-primary transition-colors">
-                <Youtube className="w-5 h-5" />
+              <a href="#" className="w-10 h-10 bg-background text-foreground flex items-center justify-center hover:-translate-y-1 hover:bg-primary transition-transform border-2 border-transparent">
+                <Youtube className="w-6 h-6" />
               </a>
             </div>
           </div>
 
           {/* Quick Links */}
           <div>
-            <h4 className="font-display text-xl mb-4">Quick Links</h4>
-            <ul className="space-y-2">
+            <h4 className="font-display text-2xl font-black mb-6 bg-primary text-foreground inline-block px-3 py-1">QUICK LINKS</h4>
+            <ul className="space-y-4">
               <li>
-                <Link to="/events" className="text-muted-foreground hover:text-primary transition-colors text-sm">
-                  All Events
+                <Link to="/events" className="text-xl font-black hover:text-primary hover:translate-x-2 transition-transform inline-block">
+                  ALL EVENTS
                 </Link>
               </li>
               <li>
-                <Link to="/categories" className="text-muted-foreground hover:text-primary transition-colors text-sm">
-                  Event Categories
+                <Link to="/categories" className="text-xl font-black hover:text-primary hover:translate-x-2 transition-transform inline-block">
+                  EVENT CATEGORIES
                 </Link>
               </li>
-
               <li>
-                <Link to="/dashboard" className="text-muted-foreground hover:text-primary transition-colors text-sm">
-                  My Dashboard
+                <Link to="/dashboard" className="text-xl font-black hover:text-primary hover:translate-x-2 transition-transform inline-block">
+                  MY DASHBOARD
                 </Link>
               </li>
             </ul>
@@ -58,26 +57,26 @@ const Footer = () => {
 
           {/* Support */}
           <div>
-            <h4 className="font-display text-xl mb-4">Support</h4>
-            <ul className="space-y-2">
+            <h4 className="font-display text-2xl font-black mb-6 bg-secondary text-foreground inline-block px-3 py-1">SUPPORT</h4>
+            <ul className="space-y-4">
               <li>
-                <a href="#" className="text-muted-foreground hover:text-primary transition-colors text-sm">
+                <a href="#" className="text-xl font-black hover:text-secondary hover:translate-x-2 transition-transform inline-block">
                   FAQ
                 </a>
               </li>
               <li>
-                <a href="#" className="text-muted-foreground hover:text-primary transition-colors text-sm">
-                  Terms & Conditions
+                <a href="#" className="text-xl font-black hover:text-secondary hover:translate-x-2 transition-transform inline-block">
+                  TERMS & CONDITIONS
                 </a>
               </li>
               <li>
-                <a href="#" className="text-muted-foreground hover:text-primary transition-colors text-sm">
-                  Privacy Policy
+                <a href="#" className="text-xl font-black hover:text-secondary hover:translate-x-2 transition-transform inline-block">
+                  PRIVACY POLICY
                 </a>
               </li>
               <li>
-                <a href="#" className="text-muted-foreground hover:text-primary transition-colors text-sm">
-                  Refund Policy
+                <a href="#" className="text-xl font-black hover:text-secondary hover:translate-x-2 transition-transform inline-block">
+                  REFUND POLICY
                 </a>
               </li>
             </ul>
@@ -85,26 +84,32 @@ const Footer = () => {
 
           {/* Contact */}
           <div>
-            <h4 className="font-display text-xl mb-4">Contact Us</h4>
-            <ul className="space-y-3">
-              <li className="flex items-center gap-2 text-muted-foreground text-sm">
-                <Mail className="w-4 h-4 text-primary" />
-                info@antarestar.com
+            <h4 className="font-display text-2xl font-black mb-6 bg-accent text-foreground inline-block px-3 py-1">CONTACT US</h4>
+            <ul className="space-y-6">
+              <li className="flex items-center gap-4 text-lg font-bold hover:text-accent transition-colors">
+                <div className="w-10 h-10 bg-background text-foreground flex items-center justify-center shrink-0">
+                  <Mail className="w-5 h-5" />
+                </div>
+                INFO@ANTARESTAR.COM
               </li>
-              <li className="flex items-center gap-2 text-muted-foreground text-sm">
-                <Phone className="w-4 h-4 text-primary" />
+              <li className="flex items-center gap-4 text-lg font-bold hover:text-accent transition-colors">
+                <div className="w-10 h-10 bg-background text-foreground flex items-center justify-center shrink-0">
+                  <Phone className="w-5 h-5" />
+                </div>
                 +62 812 3456 7890
               </li>
-              <li className="flex items-start gap-2 text-muted-foreground text-sm">
-                <MapPin className="w-4 h-4 text-primary mt-0.5" />
-                Jakarta, Indonesia
+              <li className="flex items-start gap-4 text-lg font-bold hover:text-accent transition-colors">
+                <div className="w-10 h-10 bg-background text-foreground flex items-center justify-center mt-1 shrink-0">
+                  <MapPin className="w-5 h-5" />
+                </div>
+                JAKARTA, INDONESIA
               </li>
             </ul>
           </div>
         </div>
 
-        <div className="mt-12 pt-8 border-t border-border text-center text-muted-foreground text-sm">
-          <p>&copy; {new Date().getFullYear()} Antarestar Event. All rights reserved.</p>
+        <div className="mt-20 pt-8 border-t-4 border-background/20 text-center text-lg font-black tracking-widest">
+          <p>COPYRIGHT &copy; {new Date().getFullYear()} ANTARESTAR EVENT. RAW TO THE CORE.</p>
         </div>
       </div>
     </footer>

@@ -4,7 +4,7 @@ import "leaflet/dist/leaflet.css";
 import { useEffect } from "react";
 
 // Fix for default marker icon
-// @ts-ignore
+// @ts-expect-error Leaflet defines this internal helper at runtime but omits it from the type surface.
 delete L.Icon.Default.prototype._getIconUrl;
 L.Icon.Default.mergeOptions({
     iconRetinaUrl: "https://unpkg.com/leaflet@1.7.1/dist/images/marker-icon-2x.png",

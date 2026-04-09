@@ -39,6 +39,7 @@ import { Label } from "@/components/ui/label";
 import { useAdminBookings, useUpdateBooking, useDeleteBooking, useCheckInBooking, useVerifyBookingStatus, Booking } from "@/hooks/useBookings";
 import { Skeleton } from "@/components/ui/skeleton";
 import { useToast } from "@/hooks/use-toast";
+import { AxiosError } from "axios";
 
 const statusColors = {
   pending: "bg-warning/20 text-warning",
@@ -97,6 +98,7 @@ const AdminBookings = () => {
   };
 
   const handleUpdate = async () => {
+    if (!editingBooking) return;
     try {
       await updateBooking.mutateAsync({ id: editingBooking.id, data: editFormData });
       toast({ title: "Success", description: "Booking updated successfully." });
@@ -133,10 +135,11 @@ const AdminBookings = () => {
     try {
       await verifyStatus.mutateAsync(id);
       toast({ title: "Success", description: "Booking status synchronized with Midtrans." });
-    } catch (err: any) {
+    } catch (err) {
+      const error = err as AxiosError<{ message?: string }>;
       toast({
         title: "Sync Failed",
-        description: err.response?.data?.message || "Could not sync with Midtrans API.",
+        description: error.response?.data?.message || "Could not sync with Midtrans API.",
         variant: "destructive"
       });
     }

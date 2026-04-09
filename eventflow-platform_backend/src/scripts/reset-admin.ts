@@ -1,5 +1,5 @@
-import { sequelize } from './config/database.js';
-import { User } from './models/User.js';
+import { sequelize } from '../config/database.js';
+import { User } from '../models/User.js';
 import dotenv from 'dotenv';
 import bcrypt from 'bcrypt';
 

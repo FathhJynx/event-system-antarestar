@@ -33,7 +33,7 @@ BookingParticipant.init(
             autoIncrement: true,
             primaryKey: true,
         },
-        booking_id: {
+        booking_id: {       
             type: DataTypes.BIGINT,
             allowNull: false,
             references: {

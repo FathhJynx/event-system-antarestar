@@ -25,7 +25,16 @@ export interface EventPrize {
 export interface EventParticipant {
   id: string | number;
   name: string;
-  bib_number: string;
+  email: string;
+  phone: string;
+  booking_code: string;
+  bib_number?: string | null;
+  is_checked_in: boolean;
+}
+
+export interface EventParticipantsResponse {
+  event_title: string;
+  participants: EventParticipant[];
 }
 
 export interface EventBooking {
@@ -152,10 +161,7 @@ export const useEventParticipants = (eventId: string) => {
     queryKey: ["event-participants", eventId],
     queryFn: async () => {
       const response = await api.get(`/events/${eventId}/participants`);
-      return response.data as {
-        event_title: string;
-        participants: any[];
-      };
+      return response.data as EventParticipantsResponse;
     },
     enabled: !!eventId,
   });

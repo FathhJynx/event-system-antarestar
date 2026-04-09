@@ -4,20 +4,17 @@ import { motion } from "framer-motion";
 import {
   Trophy,
   Users,
-  Award,
   MapPin,
   Calendar,
   Clock,
   Share2,
   Heart,
-  Shield,
-  Info,
-  Map as MapIcon,
   ChevronRight,
   CheckCircle,
-  QrCode,
   Copy,
-  Check
+  Check,
+  ArrowRight,
+  AlertTriangle
 } from "lucide-react";
 import MapRouteView from "@/components/events/MapRouteView";
 import Layout from "@/components/layout/Layout";
@@ -57,7 +54,6 @@ const EventDetail = () => {
   const [isCopied, setIsCopied] = useState(false);
 
   useEffect(() => {
-    // Check if event is saved in localStorage only if user is logged in
     if (!user) {
       setIsSaved(false);
       return;
@@ -74,7 +70,7 @@ const EventDetail = () => {
     if (!event) return;
 
     if (!user) {
-      toast.error("Please login to save events");
+      toast.error("PLEASE LOGIN. WE NEED YOUR INFO TO SAVE.");
       navigate("/auth");
       return;
     }
@@ -84,10 +80,10 @@ const EventDetail = () => {
 
     if (isSaved) {
       newSavedEvents = savedEvents.filter((savedId: string) => savedId !== event.id);
-      toast.success("Event removed from saved items");
+      toast.success("EVENT DIHAPUS DARI DAFTAR PANTAU.");
     } else {
       newSavedEvents = [...savedEvents, event.id];
-      toast.success("Event saved successfully");
+      toast.success("SIP! EVENT BERHASIL DISIMPAN.");
     }
 
     localStorage.setItem(`savedEvents_${user.id}`, JSON.stringify(newSavedEvents));
@@ -95,27 +91,27 @@ const EventDetail = () => {
   };
 
   const currentUrl = window.location.href;
-  const qrCodeUrl = `https://api.qrserver.com/v1/create-qr-code/?size=200x200&data=${encodeURIComponent(currentUrl)}`;
+  const qrCodeUrl = `https://api.qrserver.com/v1/create-qr-code/?size=300x300&data=${encodeURIComponent(currentUrl)}`;
 
   const handleCopyLink = () => {
     navigator.clipboard.writeText(currentUrl);
     setIsCopied(true);
-    toast.success("Link copied to clipboard");
+    toast.success("MANTAP! LINK BERHASIL DICOPY.");
     setTimeout(() => setIsCopied(false), 2000);
   };
 
   if (isLoading) {
     return (
       <Layout>
-        <div className="container mx-auto px-4 py-12 space-y-8">
-          <Skeleton className="h-[40vh] w-full rounded-xl" />
-          <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
-            <div className="lg:col-span-2 space-y-4">
-              <Skeleton className="h-12 w-3/4" />
-              <Skeleton className="h-6 w-1/2" />
-              <Skeleton className="h-40 w-full" />
+        <div className="container mx-auto px-4 py-20 space-y-12">
+          <div className="h-[50vh] border-2 border-foreground bg-muted animate-pulse shadow-[4px_4px_0px_0px_hsl(var(--foreground))]" />
+          <div className="grid grid-cols-1 lg:grid-cols-3 gap-12">
+            <div className="lg:col-span-2 space-y-6">
+              <Skeleton className="h-20 w-3/4 border-2 border-foreground rounded-none" />
+              <Skeleton className="h-8 w-1/2 border-2 border-foreground rounded-none" />
+              <Skeleton className="h-96 w-full border-2 border-foreground rounded-none" />
             </div>
-            <Skeleton className="h-80 w-full" />
+            <Skeleton className="h-[600px] w-full border-2 border-foreground rounded-none" />
           </div>
         </div>
       </Layout>
@@ -125,344 +121,302 @@ const EventDetail = () => {
   if (error || !event) {
     return (
       <Layout>
-        <div className="container mx-auto px-4 py-24 text-center">
-          <h2 className="text-3xl font-display mb-4">Event Not Found</h2>
-          <p className="text-muted-foreground mb-8">The event you are looking for doesn't exist or has been removed.</p>
-          <Link to="/events">
-            <Button>Back to Events</Button>
-          </Link>
+        <div className="container mx-auto px-4 py-32 text-center">
+          <div className="inline-block border-2 border-foreground p-8 md:p-12 bg-destructive shadow-[4px_4px_0px_0px_hsl(var(--foreground))]">
+            <AlertTriangle className="w-16 h-16 md:w-24 md:h-24 text-foreground mx-auto mb-6" />
+            <h2 className="text-4xl md:text-6xl font-display font-black uppercase text-foreground mb-4">WADUH, NYASAR!</h2>
+            <p className="text-lg md:text-xl font-bold uppercase mb-8 text-foreground">EVENT INI GAK KETEMU ATAU UDAH GAK TERSEDIA LAGI.</p>
+            <Link to="/events">
+              <Button size="lg" className="btn-neo text-xl md:text-2xl h-16 md:h-20 px-12 bg-background text-foreground hover:bg-foreground hover:text-background shadow-[2px_2px_0px_0px_black]">
+                BALIK KE DAFTAR EVENT
+              </Button>
+            </Link>
+          </div>
         </div>
       </Layout>
     );
   }
 
-
+  const spotsLeft = (event.max_participants || 0) - (event.registered_count || 0);
 
   return (
     <Layout>
-      {/* Hero */}
-      <section className="relative h-[50vh] md:h-[60vh]">
-        <img
-          src={event.image || "/placeholder.svg"}
-          alt={event.title}
-          className="w-full h-full object-cover"
-        />
-        <div className="absolute inset-0 bg-hero-gradient" />
-
-        <div className="absolute bottom-0 left-0 right-0 pb-8">
-          <div className="container mx-auto px-4">
-            {/* Breadcrumb */}
-            <div className="flex items-center gap-2 text-sm text-muted-foreground mb-4">
-              <Link to="/" className="hover:text-foreground">Home</Link>
-              <ChevronRight className="w-4 h-4" />
-              <Link to="/events" className="hover:text-foreground">Events</Link>
-              <ChevronRight className="w-4 h-4" />
-              <span className="text-foreground">{event.title}</span>
-            </div>
-
-            <motion.div
-              initial={{ opacity: 0, y: 20 }}
-              animate={{ opacity: 1, y: 0 }}
-            >
-              <span className="badge-category mb-4 inline-block">
-                {event.event_categories?.name || "Event"}
-              </span>
-              <h1 className="font-display text-3xl md:text-5xl lg:text-6xl mb-2 text-white drop-shadow-md">{event.title}</h1>
-              <p className="text-lg md:text-xl text-gray-200">{event.slug}</p>
-            </motion.div>
-          </div>
+      <div className="bg-white min-h-screen font-sans selection:bg-black selection:text-white">
+        {/* Collector Series Breadcrumb */}
+        <div className="bg-white border-b-2 border-black pt-8 pb-4 px-4 sticky top-[64px] md:top-[96px] z-[40]">
+           <div className="container mx-auto flex items-center gap-4 text-[10px] font-black uppercase tracking-[0.3em] opacity-40">
+              <Link to="/" className="hover:text-black transition-colors">BERANDA</Link>
+              <div className="w-4 h-[1px] bg-black/20" />
+              <Link to="/events" className="hover:text-black transition-colors">EVENT</Link>
+              <div className="w-4 h-[1px] bg-black/20" />
+              <span className="text-black">{event.title}</span>
+           </div>
         </div>
-      </section>
 
-      {/* Main Content */}
-      <section className="py-12 bg-background">
-        <div className="container mx-auto px-4">
-          <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
-            {/* Left Content */}
-            <div className="lg:col-span-2 space-y-8">
-              {/* Quick Info */}
-              <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
-                <div className="p-4 rounded-xl bg-card border border-border">
-                  <Calendar className="w-5 h-5 text-primary mb-2" />
-                  <div className="text-sm text-muted-foreground">Date</div>
-                  <div className="font-semibold break-words">{event.date ? new Date(event.date).toLocaleDateString() : 'TBA'}</div>
-                </div>
-                <div className="p-4 rounded-xl bg-card border border-border">
-                  <Clock className="w-5 h-5 text-primary mb-2" />
-                  <div className="text-sm text-muted-foreground">Status</div>
-                  <div className="font-semibold capitalize break-words">{event.status}</div>
-                </div>
-                <div className="p-4 rounded-xl bg-card border border-border">
-                  <MapPin className="w-5 h-5 text-primary mb-2" />
-                  <div className="text-sm text-muted-foreground">Venue</div>
-                  <div className="font-semibold break-words">{event.venues?.name || "TBA"}{event.venues?.city ? `, ${event.venues.city}` : ''}</div>
-                </div>
-                <div className="p-4 rounded-xl bg-card border border-border">
-                  <Trophy className="w-5 h-5 text-primary mb-2" />
-                  <div className="text-sm text-muted-foreground">Prizepool</div>
-                  <div className="font-semibold text-gradient break-words">
-                    {event.prizepool ? `Rp ${Number(event.prizepool).toLocaleString("id-ID")}` : 'TBA'}
+        {/* High-Impact Detail Hero */}
+        <section className="relative border-b-2 border-black overflow-hidden flex flex-col lg:flex-row">
+           {/* Left: Mission Content */}
+           <div className="w-full lg:w-3/5 p-8 md:p-16 lg:p-24 border-r-0 lg:border-r-2 border-black flex flex-col justify-center">
+              <motion.div
+                initial={{ opacity: 0, x: -30 }}
+                animate={{ opacity: 1, x: 0 }}
+              >
+                  <div className="flex items-center gap-4 mb-8">
+                     <span className="font-black text-[10px] uppercase tracking-widest leading-none">
+                        {event.event_categories?.name || "MISSION"}
+                     </span>
+                     <div className="h-[1px] flex-1 bg-black/10" />
+                     <span className="font-black text-[10px] uppercase tracking-widest opacity-40">CASE NO: {String(event.id).slice(-6).toUpperCase()}</span>
                   </div>
-                </div>
-              </div>
+                  
+                  <h1 className="font-display text-5xl md:text-7xl lg:text-8xl font-black uppercase tracking-tighter leading-[0.85] mb-12">
+                     {event.title}
+                  </h1>
 
-
-              {/* Tabs */}
-              <Tabs defaultValue="about" className="w-full">
-                <TabsList className="w-full flex bg-card p-1 overflow-x-auto no-scrollbar">
-                  <TabsTrigger value="about" className="flex-1 min-w-[100px]">About</TabsTrigger>
-                  <TabsTrigger value="schedule" className="flex-1 min-w-[100px]">Schedule</TabsTrigger>
-                  {event.route_coordinates && (
-                    <TabsTrigger value="route" className="flex-1 min-w-[100px]">Route</TabsTrigger>
-                  )}
-                  <TabsTrigger value="prizes" className="flex-1 min-w-[100px]">Prizes</TabsTrigger>
-                  <TabsTrigger value="participants" className="flex-1 min-w-[100px]">Participants</TabsTrigger>
-                </TabsList>
-
-
-                <TabsContent value="about" className="mt-6 space-y-6">
-                  <div>
-                    <h3 className="font-display text-2xl mb-4">Event Description</h3>
-                    <p className="text-muted-foreground whitespace-pre-line leading-relaxed break-words">
-                      {event.description || "No description available."}
-                    </p>
+                  <div className="grid grid-cols-2 lg:grid-cols-4 gap-8 mb-12 border-t-2 border-black pt-12">
+                     <div>
+                        <p className="text-[10px] font-black uppercase tracking-widest opacity-40 mb-2">TANGGAL</p>
+                        <p className="font-display text-3xl font-black uppercase">{event.date ? new Date(event.date).toLocaleDateString('id-ID', { day: 'numeric', month: 'short' }) : 'TBA'}</p>
+                     </div>
+                     <div>
+                        <p className="text-[10px] font-black uppercase tracking-widest opacity-40 mb-2">LOKASI</p>
+                        <p className="font-bold text-sm uppercase tracking-wider">{event.venues?.city || "ARENA"}</p>
+                     </div>
+                     <div>
+                        <p className="text-[10px] font-black uppercase tracking-widest opacity-40 mb-2">HADIAH</p>
+                        <p className="font-display text-3xl font-black uppercase">{event.prizepool ? `Rp ${(Number(event.prizepool)/1000000).toFixed(0)}JT` : 'TBA'}</p>
+                     </div>
+                     <div>
+                        <p className="text-[10px] font-black uppercase tracking-widest opacity-40 mb-2">STATUS</p>
+                        <p className="font-black text-sm uppercase text-primary">{event.status === 'open' ? 'BUKA' : 'TUTUP'}</p>
+                     </div>
                   </div>
-                </TabsContent>
+              </motion.div>
+           </div>
 
-                <TabsContent value="schedule" className="mt-6">
-                  <h3 className="font-display text-2xl mb-4">Event Schedule</h3>
-                  <div className="p-6 rounded-xl bg-card border border-border">
-                    <p className="text-muted-foreground whitespace-pre-line leading-relaxed">
-                      {event.schedule || "No schedule information available yet."}
-                    </p>
-                  </div>
-                </TabsContent>
+           {/* Right: Masterpiece Image */}
+           <div className="w-full lg:w-2/5 relative h-[500px] lg:h-auto bg-zinc-100 overflow-hidden">
+               <img src={event.image || "/placeholder.svg"} alt={event.title} className="w-full h-full object-cover grayscale hover:grayscale-0 transition-all duration-1000" />
+               <div className="absolute inset-0 bg-black/10 mix-blend-multiply pointer-events-none" />
+           </div>
+        </section>
 
-                {event.route_coordinates && (
-                  <TabsContent value="route" className="mt-6 space-y-6">
-                    <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                      {event.route_start_name && (
-                        <div className="p-4 rounded-xl bg-card border border-border flex items-start gap-3">
-                          <div className="w-10 h-10 rounded-full bg-success/10 flex items-center justify-center shrink-0">
-                            <MapPin className="w-5 h-5 text-success" />
-                          </div>
+        {/* Content Section: Information & Registration */}
+        <section className="bg-zinc-50/30">
+           <div className="container mx-auto px-4 py-20 lg:py-32">
+              <div className="grid grid-cols-1 lg:grid-cols-12 gap-16 lg:gap-24">
+                 
+                 {/* Left Column: Mission Files */}
+                 <div className="lg:col-span-7 space-y-24">
+                    <Tabs defaultValue="about" className="w-full">
+                       <TabsList className="w-full flex bg-transparent p-0 border-b-2 border-black/10 mb-12 gap-10 overflow-x-auto no-scrollbar justify-start">
+                          {['about', 'schedule', 'route', 'prizes', 'participants'].filter(tab => tab !== 'route' || event.route_coordinates).map(tab => (
+                             <TabsTrigger 
+                               key={tab} 
+                               value={tab} 
+                               className="rounded-none border-b-2 border-transparent data-[state=active]:border-black data-[state=active]:text-black font-black uppercase text-xs md:text-sm tracking-widest py-4 bg-transparent text-black/40 transition-all"
+                             >
+                                {tab}
+                             </TabsTrigger>
+                          ))}
+                       </TabsList>
+
+                       <TabsContent value="about" className="space-y-10">
                           <div>
-                            <div className="text-xs text-muted-foreground uppercase tracking-wider font-semibold">Start Location</div>
-                            <div className="font-display text-lg">{event.route_start_name}</div>
+                             <h3 className="font-display text-4xl lg:text-5xl font-black uppercase mb-8">TENTANG ARENA</h3>
+                             <p className="font-bold text-lg lg:text-xl uppercase tracking-wider leading-relaxed text-black/80 whitespace-pre-line border-l-4 border-black pl-8">
+                                {event.description || "DETAIL MISI BELUM TERSEDIA, SOB. PANTAU TERUS UPDATE-NYA."}
+                             </p>
                           </div>
-                        </div>
-                      )}
-                      {event.route_end_name && (
-                        <div className="p-4 rounded-xl bg-card border border-border flex items-start gap-3">
-                          <div className="w-10 h-10 rounded-full bg-destructive/10 flex items-center justify-center shrink-0">
-                            <CheckCircle className="w-5 h-5 text-destructive" />
+                          
+                          {/* Quick Stats Grid */}
+                          <div className="grid grid-cols-1 md:grid-cols-3 gap-8 py-10 border-y-2 border-black/5">
+                             <div className="flex items-center gap-4">
+                                <Users className="w-10 h-10 text-black/20" />
+                                <div>
+                                   <p className="text-[10px] font-black opacity-40 uppercase">PENDAFTAR</p>
+                                   <p className="font-display text-3xl font-black">{event.registered_count || 0}</p>
+                                </div>
+                             </div>
+                             <div className="flex items-center gap-4">
+                                <Trophy className="w-10 h-10 text-black/20" />
+                                <div>
+                                   <p className="text-[10px] font-black opacity-40 uppercase">KUOTA MAX</p>
+                                   <p className="font-display text-3xl font-black">{event.max_participants || "UNLIMITED"}</p>
+                                </div>
+                             </div>
+                             <div className="flex items-center gap-4">
+                                <Clock className="w-10 h-10 text-black/20" />
+                                <div>
+                                   <p className="text-[10px] font-black opacity-40 uppercase">DURASI</p>
+                                   <p className="font-display text-3xl font-black">2.5 JAM</p>
+                                </div>
+                             </div>
                           </div>
-                          <div>
-                            <div className="text-xs text-muted-foreground uppercase tracking-wider font-semibold">End Location</div>
-                            <div className="font-display text-lg">{event.route_end_name}</div>
+                       </TabsContent>
+
+                       <TabsContent value="schedule" className="space-y-8">
+                          <div className="bg-white border-2 border-black p-10 shadow-[4px_4px_0px_0px_black]">
+                             <h3 className="font-display text-4xl font-black uppercase mb-8">URUTAN MAIN</h3>
+                             <p className="font-bold text-lg uppercase tracking-widest whitespace-pre-line leading-relaxed">
+                                {event.schedule || "JADWAL RESMI AKAN DIRILIS SEGERA."}
+                             </p>
                           </div>
-                        </div>
-                      )}
-                    </div>
+                       </TabsContent>
 
-                    <motion.div
-                      initial={{ opacity: 0, scale: 0.95 }}
-                      animate={{ opacity: 1, scale: 1 }}
-                    >
-                      <MapRouteView routeCoordinates={event.route_coordinates} />
-                    </motion.div>
-                  </TabsContent>
-                )}
+                       <TabsContent value="participants" className="space-y-8 text-black">
+                          <div className="border-2 border-black overflow-hidden bg-white shadow-[4px_4px_0px_0px_black]">
+                             <div className="p-8 border-b-2 border-black bg-zinc-50">
+                                <h3 className="font-display text-4xl font-black uppercase">DAFTAR JAGOAN</h3>
+                                <p className="font-bold uppercase tracking-[0.2em] text-[10px] opacity-40">TARGET OPERATIVES YANG SUDAH TERDAFTAR.</p>
+                             </div>
+                             <div className="overflow-x-auto">
+                                <Table>
+                                   <TableHeader className="bg-zinc-50/50 border-b-2 border-black">
+                                      <TableRow className="hover:bg-transparent">
+                                         <TableHead className="font-black uppercase text-[10px] py-6 border-r-2 border-black">ID</TableHead>
+                                         <TableHead className="font-black uppercase text-[10px] py-6 border-r-2 border-black">NAMA</TableHead>
+                                         <TableHead className="font-black uppercase text-[10px] py-6 border-r-2 border-black text-center">BOOKING ID</TableHead>
+                                         <TableHead className="font-black uppercase text-[10px] py-6 text-right pr-8">DATE</TableHead>
+                                      </TableRow>
+                                   </TableHeader>
+                                   <TableBody>
+                                      {event.Bookings?.length ? (
+                                         event.Bookings.flatMap(b => b.participants.map(p => ({ ...p, code: b.code }))).map((p, i) => (
+                                            <TableRow key={i} className="border-b-2 border-black/5 last:border-b-0 hover:bg-zinc-50 transition-colors">
+                                               <TableCell className="font-display text-lg py-4 border-r-2 border-black/5">{i+1}</TableCell>
+                                               <TableCell className="font-black uppercase text-sm py-4 border-r-2 border-black/5">{p.name}</TableCell>
+                                               <TableCell className="py-4 border-r-2 border-black/5 text-center">
+                                                  <span className="bg-black text-white px-4 py-1 font-mono font-bold text-[10px] rounded-full uppercase">{p.code}</span>
+                                               </TableCell>
+                                               <TableCell className="text-right font-bold text-[10px] pr-8 uppercase opacity-40">24 JAN 2024</TableCell>
+                                            </TableRow>
+                                         ))
+                                      ) : (
+                                         <TableRow>
+                                            <TableCell colSpan={4} className="h-48 text-center text-sm font-black uppercase opacity-20">BELUM ADA YANG DAFTAR. JADI YANG PERTAMA!</TableCell>
+                                         </TableRow>
+                                      )}
+                                   </TableBody>
+                                </Table>
+                             </div>
+                          </div>
+                       </TabsContent>
 
-
-                <TabsContent value="prizes" className="mt-6 space-y-8">
-                  <div>
-                    <h3 className="font-display text-2xl mb-4">Prizepool</h3>
-                    <div className="p-8 rounded-2xl bg-gradient-to-br from-card to-muted border border-border text-center">
-                      <Trophy className="w-16 h-16 mx-auto mb-4 text-warning" />
-                      <div className="text-4xl md:text-5xl font-bold text-gradient mb-2">
-                        {event.prizepool ? `Rp ${Number(event.prizepool).toLocaleString("id-ID")}` : "TBA"}
-                      </div>
-                      <p className="text-muted-foreground">Total Prizepool to be won!</p>
-                    </div>
-                  </div>
-
-                  {event.additional_rewards && (
-                    <div>
-                      <h3 className="font-display text-2xl mb-4">Additional Rewards</h3>
-                      <div className="p-6 rounded-xl bg-card border border-border">
-                        <p className="text-muted-foreground whitespace-pre-line leading-relaxed">
-                          {event.additional_rewards}
-                        </p>
-                      </div>
-                    </div>
-                  )}
-                </TabsContent>
-
-                <TabsContent value="participants" className="mt-6 space-y-6">
-                  <div>
-                    <h3 className="font-display text-2xl mb-2">Registered Participants</h3>
-                    <p className="text-muted-foreground mb-6">List of individuals who have successfully registered for this event.</p>
-
-                    <div className="rounded-xl border border-border overflow-hidden bg-card">
-                      <Table>
-                        <TableHeader className="bg-muted/50">
-                          <TableRow>
-                            <TableHead className="w-[80px]">No</TableHead>
-                            <TableHead>Participant Name</TableHead>
-                            <TableHead>Booking Reference</TableHead>
-                            <TableHead className="text-right">Registration Date</TableHead>
-                          </TableRow>
-                        </TableHeader>
-                        <TableBody>
-                          {event.Bookings && event.Bookings.length > 0 ? (
-                            event.Bookings.flatMap((booking) =>
-                              booking.participants.map(p => ({
-                                ...p,
-                                bookingCode: booking.code || "N/A",
-                                createdAt: (booking as any).createdAt || booking.created_at
-                              }))
-                            ).sort((a, b) => {
-                              const dateA = a.createdAt ? new Date(a.createdAt).getTime() : 0;
-                              const dateB = b.createdAt ? new Date(b.createdAt).getTime() : 0;
-                              return dateA - dateB;
-                            })
-                              .map((participant, index) => (
-                                <TableRow key={`${participant.bookingCode}-${participant.id || index}`}>
-                                  <TableCell className="font-medium">{index + 1}</TableCell>
-                                  <TableCell className="font-display">{participant.name}</TableCell>
-                                  <TableCell className="font-mono text-xs text-primary">{participant.bookingCode}</TableCell>
-                                  <TableCell className="text-right text-muted-foreground">
-                                    {(() => {
-                                      const dateStr = participant.createdAt;
-                                      const date = dateStr ? new Date(dateStr) : null;
-                                      return date && !isNaN(date.getTime())
-                                        ? date.toLocaleDateString('id-ID', { day: '2-digit', month: 'short', year: 'numeric' })
-                                        : 'TBA';
-                                    })()}
-                                  </TableCell>
-                                </TableRow>
-                              ))
-                          ) : (
-                            <TableRow>
-                              <TableCell colSpan={4} className="h-24 text-center text-muted-foreground">
-                                No participants registered yet.
-                              </TableCell>
-                            </TableRow>
+                       <TabsContent value="prizes" className="space-y-12 text-black">
+                          <div className="p-12 border-2 border-black bg-primary/5 text-center shadow-[4px_4px_0px_0px_black]">
+                             <Trophy className="w-20 h-20 mx-auto mb-8 opacity-20" />
+                             <h3 className="text-[10px] font-black uppercase tracking-[0.4em] mb-4">TOTAL PRIZEPOOL</h3>
+                             <p className="font-display text-6xl md:text-8xl font-black uppercase tracking-tighter leading-none">
+                                {event.prizepool ? `RP ${Number(event.prizepool).toLocaleString("id-ID")}` : "CUMA GLORY, SOB"}
+                             </p>
+                          </div>
+                          {event.additional_rewards && (
+                             <div className="p-10 border-2 border-black bg-white">
+                                <h4 className="font-black uppercase text-xs tracking-widest mb-6 border-b-2 border-black/5 pb-4">BONUS REWARD</h4>
+                                <p className="font-bold uppercase text-lg leading-relaxed opacity-60 italic">{event.additional_rewards}</p>
+                             </div>
                           )}
-                        </TableBody>
-                      </Table>
-                    </div>
-                  </div>
-                </TabsContent>
+                       </TabsContent>
 
-              </Tabs>
-            </div>
+                       {event.route_coordinates && (
+                          <TabsContent value="route" className="space-y-12 text-black">
+                             <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
+                                <div className="p-8 border-2 border-black bg-white shadow-[4px_4px_0px_0px_black]">
+                                   <p className="text-[10px] font-black uppercase opacity-40 mb-4 tracking-widest">TITIK START</p>
+                                   <p className="font-display text-4xl font-black uppercase">{event.route_start_name || "ARENA START"}</p>
+                                </div>
+                                <div className="p-8 border-2 border-black bg-white shadow-[4px_4px_0px_0px_black]">
+                                   <p className="text-[10px] font-black uppercase opacity-40 mb-4 tracking-widest">TITIK FINISH</p>
+                                   <p className="font-display text-4xl font-black uppercase">{event.route_end_name || "ARENA FINISH"}</p>
+                                </div>
+                             </div>
+                             <div className="border-2 border-black bg-zinc-100 aspect-video relative overflow-hidden shadow-[4px_4px_0px_0px_black]">
+                                <MapRouteView routeCoordinates={event.route_coordinates} />
+                             </div>
+                          </TabsContent>
+                       )}
+                    </Tabs>
+                 </div>
 
-            {/* Right Sidebar */}
-            <div className="space-y-6">
-              <div className="p-6 rounded-xl bg-card border border-border">
-                <h3 className="font-display text-xl mb-4">Registration</h3>
-                <div className="space-y-4">
-                  <div className="flex flex-col sm:flex-row sm:justify-between sm:items-center gap-2 p-4 rounded-xl border border-primary/20 bg-primary/5">
-                    <div className="font-medium text-foreground">Registration Fee</div>
-                    <div className="font-display text-2xl text-primary break-all">
-                      {event.price ? `Rp ${Number(event.price).toLocaleString("id-ID")}` : "Free"}
-                    </div>
-                  </div>
+                 {/* Right Column: Registration Unit */}
+                 <div className="lg:col-span-5">
+                    <div className="lg:sticky lg:top-40 space-y-8">
+                       {/* Main Checkout Box */}
+                       <div className="bg-white border-2 border-black shadow-[4px_4px_0px_0px_black] p-10 overflow-hidden relative">
+                          <div className="absolute top-0 right-0 py-2 px-6 bg-black text-white font-black text-[10px] uppercase tracking-widest">REGISTRATION BOX</div>
+                          
+                          <div className="mb-12">
+                             <p className="text-[10px] font-black uppercase opacity-40 mb-4 tracking-[0.4em]">BIAYA DAFTAR</p>
+                             <div className="font-display text-5xl md:text-7xl font-black uppercase">
+                                {event.price ? `RP ${Number(event.price).toLocaleString("id-ID")}` : "GRATIS, SOB!"}
+                             </div>
+                          </div>
 
-                  <div className="space-y-3 p-4 rounded-xl border border-border bg-muted/30">
-                    <div className="flex justify-between items-center text-sm">
-                      <span className="text-muted-foreground">Reg. Starts</span>
-                      <span className="font-semibold">{event.registration_start ? new Date(event.registration_start).toLocaleDateString() : 'TBA'}</span>
-                    </div>
-                    <div className="flex justify-between items-center text-sm">
-                      <span className="text-muted-foreground">Reg. Ends</span>
-                      <span className="font-semibold text-destructive">{event.registration_end ? new Date(event.registration_end).toLocaleDateString() : 'TBA'}</span>
-                    </div>
-                  </div>
+                          <div className="space-y-6 mb-12">
+                             <div className="flex justify-between items-center py-4 border-b-2 border-black/5">
+                                <span className="text-[10px] font-black uppercase tracking-widest opacity-40">BATAS PENDAFTARAN</span>
+                                <span className="font-black text-xs uppercase">{event.registration_end ? new Date(event.registration_end).toLocaleDateString('id-ID') : 'TBA'}</span>
+                             </div>
+                             <div className="flex justify-between items-center py-4 border-b-2 border-black/5">
+                                <span className="text-[10px] font-black uppercase tracking-widest opacity-40">SISA SLOT</span>
+                                <span className="font-black text-xs uppercase text-primary">{(event.max_participants || 0) - (event.registered_count || 0)} KURSI</span>
+                             </div>
+                          </div>
 
-                  {user ? (
-                    <Link to={event.status === 'open' ? `/events/${event.id}/register` : "#"}>
-                      <Button size="lg" className="btn-hero w-full rounded-xl h-14" disabled={event.status !== 'open'}>
-                        {event.status === 'open' ? 'Register Now' : 'Registration Closed'}
-                      </Button>
-                    </Link>
-                  ) : (
-                    <Button
-                      size="lg"
-                      className="btn-hero w-full rounded-xl h-14"
-                      onClick={() => {
-                        toast.error("Please login to register for events");
-                        navigate("/auth");
-                      }}
-                      disabled={event.status !== 'open'}
-                    >
-                      {event.status === 'open' ? 'Login to Register' : 'Registration Closed'}
-                    </Button>
-                  )}
-                </div>
+                          <div className="space-y-4">
+                             {user ? (
+                                <Link to={event.status === 'open' && spotsLeft > 0 ? `/events/${event.id}/register` : "#"} className="block">
+                                   <Button className="w-full h-16 text-xl font-black uppercase tracking-widest rounded-none bg-black text-white hover:bg-zinc-800 transition-all shadow-[2px_2px_0px_0px_rgba(0,0,0,0.2)]">
+                                      DAFTAR SEKARANG <ArrowRight className="ml-4 w-8 h-8" />
+                                   </Button>
+                                </Link>
+                             ) : (
+                                <Button 
+                                  onClick={() => { navigate("/auth"); toast.error("MASUK DULU BRO!"); }} 
+                                  className="w-full h-20 text-xl font-black uppercase tracking-widest rounded-none bg-black text-white hover:bg-zinc-800"
+                                >
+                                   LOG IN BUAT DAFTAR
+                                </Button>
+                             )}
+                             
+                             <div className="grid grid-cols-2 gap-4">
+                                <Button onClick={handleSave} className={`h-16 rounded-none border-2 border-black font-black uppercase text-[10px] tracking-widest transition-all ${isSaved ? 'bg-primary text-black' : 'bg-white text-black hover:bg-zinc-50'}`}>
+                                   <Heart className={`w-4 h-4 mr-2 ${isSaved ? 'fill-current' : ''}`} />
+                                   {isSaved ? 'TERSIMPAN' : 'SIMPAN MISI'}
+                                </Button>
+                                <Dialog>
+                                   <DialogTrigger asChild>
+                                      <Button className="h-16 rounded-none border-2 border-black bg-white text-black hover:bg-zinc-50 font-black uppercase text-[10px] tracking-widest">
+                                         <Share2 className="w-4 h-4 mr-2" />
+                                         AJAK SQUAD
+                                      </Button>
+                                   </DialogTrigger>
+                                   <DialogContent className="border-2 border-black rounded-none p-10 bg-white">
+                                      <div className="text-center">
+                                         <h3 className="font-display text-4xl font-black uppercase mb-6">SHARE KE SQUAD</h3>
+                                         <div className="p-8 bg-zinc-50 border-2 border-black mb-8 inline-block">
+                                            <img src={qrCodeUrl} alt="QR" className="w-48 h-48 mx-auto" />
+                                         </div>
+                                         <div className="flex gap-2">
+                                            <Input defaultValue={currentUrl} readOnly className="border-2 border-black rounded-none font-mono text-xs uppercase" />
+                                            <Button onClick={handleCopyLink} className="bg-black text-white rounded-none w-14 shrink-0">
+                                               {isCopied ? <Check className="w-5 h-5" /> : <Copy className="w-5 h-5" />}
+                                            </Button>
+                                         </div>
+                                      </div>
+                                   </DialogContent>
+                                </Dialog>
+                             </div>
+                          </div>
+                       </div>
+                    </div>
+                 </div>
               </div>
-
-
-              {/* Share & Save */}
-              <div className="flex gap-2">
-                <Dialog>
-                  <DialogTrigger asChild>
-                    <Button variant="outline" className="flex-1 gap-2">
-                      <Share2 className="w-4 h-4" />
-                      Share
-                    </Button>
-                  </DialogTrigger>
-                  <DialogContent className="sm:max-w-md">
-                    <DialogHeader>
-                      <DialogTitle>Share this event</DialogTitle>
-                      <DialogDescription>
-                        Scan the QR code or copy the link to share this event with friends.
-                      </DialogDescription>
-                    </DialogHeader>
-                    <div className="flex flex-col items-center justify-center p-6 space-y-4">
-                      <div className="bg-white p-4 rounded-xl border border-border shadow-sm">
-                        <img
-                          src={qrCodeUrl}
-                          alt="QR Code"
-                          className="w-48 h-48"
-                        />
-                      </div>
-                      <div className="flex w-full items-center space-x-2">
-                        <div className="grid flex-1 gap-2">
-                          <Label htmlFor="link" className="sr-only">
-                            Link
-                          </Label>
-                          <Input
-                            id="link"
-                            defaultValue={currentUrl}
-                            readOnly
-                          />
-                        </div>
-                        <Button type="submit" size="sm" className="px-3" onClick={handleCopyLink}>
-                          <span className="sr-only">Copy</span>
-                          {isCopied ? <Check className="h-4 w-4" /> : <Copy className="h-4 w-4" />}
-                        </Button>
-                      </div>
-                    </div>
-                  </DialogContent>
-                </Dialog>
-
-                <Button
-                  variant="outline"
-                  className={`flex-1 gap-2 ${isSaved ? 'text-primary border-primary/50 bg-primary/5' : ''}`}
-                  onClick={handleSave}
-                >
-                  <Heart className={`w-4 h-4 ${isSaved ? 'fill-current' : ''}`} />
-                  {isSaved ? 'Saved' : 'Save'}
-                </Button>
-              </div>
-            </div>
-          </div>
-        </div>
-      </section>
-    </Layout >
+           </div>
+        </section>
+      </div>
+    </Layout>
   );
 };
 

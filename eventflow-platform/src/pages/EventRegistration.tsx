@@ -411,7 +411,7 @@ const EventRegistration = () => {
                     </div>
 
                     <div className="space-y-6">
-                        <div className="bg-card border border-border rounded-2xl p-6 sticky top-24">
+                        <div className="bg-card border border-border rounded-2xl p-6 sticky top-[80px] md:top-[112px]">
                             <h3 className="font-display text-xl mb-4">Summary</h3>
                             <div className="space-y-4">
                                 <div className="flex justify-between pb-4 border-b border-border">

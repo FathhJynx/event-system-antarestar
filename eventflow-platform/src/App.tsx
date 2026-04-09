@@ -12,6 +12,8 @@ import Events from "./pages/Events";
 import EventDetail from "./pages/EventDetail";
 import Auth from "./pages/Auth";
 import AdminAuth from "./pages/AdminAuth";
+import Gallery from "./pages/Gallery";
+import Profile from "./pages/Profile";
 import EventRegistration from "./pages/EventRegistration";
 import AdminDashboard from "./pages/admin/AdminDashboard";
 import AdminCategories from "./pages/admin/AdminCategories";
@@ -51,6 +53,12 @@ const App = () => (
             <Route path="/events" element={<Events />} />
             <Route path="/events/:id" element={<EventDetail />} />
             <Route path="/events/:id/register" element={<EventRegistration />} />
+            <Route path="/gallery" element={<Gallery />} />
+            <Route path="/profile" element={
+              <ProtectedRoute>
+                <Profile />
+              </ProtectedRoute>
+            } />
             <Route path="/auth" element={<Auth />} />
             <Route path="/admin/auth" element={<AdminAuth />} />
 
