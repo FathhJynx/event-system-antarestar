@@ -8,7 +8,7 @@ export const requestWithdrawal = async (userId: string, data: any) => {
 
     // 1. Calculate Total Earnings
     // Get all events by user
-    const events = await eventRepository.findAll({ where: { organizer_id: userId } });
+    const events = await eventRepository.findAll({ where: { user_id: userId } });
     const eventIds = events.map((e: any) => e.id);
 
     // Sum bookings for these events
@@ -59,9 +59,7 @@ export const getWithdrawals = async (userId: string) => {
 };
 
 export const getOrganizerStats = async (userId: string) => {
-    // Replicate logic or reuse helper?
-    // Reuse logic:
-    const events = await eventRepository.findAll({ where: { organizer_id: userId } });
+    const events = await eventRepository.findAll({ where: { user_id: userId } });
     const eventIds = events.map((e: any) => e.id);
 
     const totalRevenue = await bookingRepository.sum('total', {
@@ -74,19 +72,39 @@ export const getOrganizerStats = async (userId: string) => {
     const platformFeePercentage = 0.10;
     const totalEarnings = totalRevenue * (1 - platformFeePercentage);
 
-    const totalWithdrawn = await withdrawalRepository.sumAmount({
+    const pendingWithdrawal = await withdrawalRepository.sumAmount({
         where: {
             user_id: userId,
-            status: { [Op.in]: ['pending', 'approved'] }
+            status: 'pending'
         }
     }) || 0;
 
-    const balance = totalEarnings - totalWithdrawn;
+    const approvedWithdrawal = await withdrawalRepository.sumAmount({
+        where: {
+            user_id: userId,
+            status: 'approved'
+        }
+    }) || 0;
+
+    const completedWithdrawal = await withdrawalRepository.sumAmount({
+        where: {
+            user_id: userId,
+            status: 'completed'
+        }
+    }) || 0;
+
+    const totalWithdrawn = pendingWithdrawal + approvedWithdrawal + completedWithdrawal;
+    const balance = totalEarnings - (pendingWithdrawal + approvedWithdrawal);
 
     return {
+        totalRevenue,
         totalEarnings,
+        pendingWithdrawal,
+        approvedWithdrawal,
+        completedWithdrawal,
         totalWithdrawn,
-        balance
+        balance,
+        platformFeePercentage
     };
 };
 

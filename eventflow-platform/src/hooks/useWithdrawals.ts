@@ -24,6 +24,17 @@ export interface Withdrawal {
     };
 }
 
+export interface WithdrawalStats {
+    totalRevenue: number;
+    totalEarnings: number;
+    pendingWithdrawal: number;
+    approvedWithdrawal: number;
+    completedWithdrawal: number;
+    totalWithdrawn: number;
+    balance: number;
+    platformFeePercentage: number;
+}
+
 export const useWithdrawals = () => {
     return useQuery({
         queryKey: ["withdrawals"],
@@ -66,7 +77,7 @@ export const useOrganizerStats = () => {
         queryKey: ["organizer-stats"],
         queryFn: async () => {
             const response = await api.get("/withdrawals/stats");
-            return response.data;
+            return response.data as WithdrawalStats;
         },
     });
 };

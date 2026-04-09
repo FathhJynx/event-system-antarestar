@@ -76,7 +76,7 @@ const Profile = () => {
            </div>
 
            <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-              <Link to="/my-bookings" className="flex items-center justify-between p-8 border-4 border-black hover:bg-black hover:text-white transition-all group">
+              <Link to="/my-bookings" className="flex items-center justify-between p-8 border-4 border-black hover:bg-[#ffde03] hover:text-black transition-all group">
                  <div className="flex items-center gap-6">
                     <Ticket className="w-8 h-8" />
                     <span className="font-sans font-black uppercase text-xl tracking-widest">TIKET SAYA</span>

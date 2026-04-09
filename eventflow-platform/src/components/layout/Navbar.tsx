@@ -92,12 +92,12 @@ const Navbar = () => {
                     </Link>
                   )}
                   <Link to="/profile">
-                    <DropdownMenuItem className="gap-4 cursor-pointer font-black uppercase text-lg p-5 border-b-4 border-black hover:bg-zinc-100 focus:bg-zinc-100">
+                    <DropdownMenuItem className="gap-4 cursor-pointer font-black uppercase text-lg p-5 border-b-4 border-black hover:bg-[#ffde03] hover:text-black focus:bg-[#ffde03] focus:text-black">
                       <User className="w-6 h-6" /> PROFIL SAYA
                     </DropdownMenuItem>
                   </Link>
                   <Link to="/my-bookings">
-                    <DropdownMenuItem className="gap-4 cursor-pointer font-black uppercase text-lg p-5 border-b-4 border-black hover:bg-zinc-100 focus:bg-zinc-100">
+                    <DropdownMenuItem className="gap-4 cursor-pointer font-black uppercase text-lg p-5 border-b-4 border-black hover:bg-[#ffde03] hover:text-black focus:bg-[#ffde03] focus:text-black">
                       <Ticket className="w-6 h-6" /> TIKET SAYA
                     </DropdownMenuItem>
                   </Link>
@@ -167,25 +167,25 @@ const Navbar = () => {
 
                     {isAdmin && (
                       <Link to="/admin" onClick={() => setIsOpen(false)}>
-                        <Button className="w-full justify-start gap-4 text-xl font-black py-10 rounded-none border-b-4 border-foreground bg-primary text-foreground hover:bg-foreground hover:text-primary">
-                          <LayoutDashboard className="w-6 h-6" /> DASHBOARD ADMIN
-                        </Button>
-                      </Link>
-                    )}
-                    
-                    <Link to="/my-bookings" onClick={() => setIsOpen(false)}>
-                      <Button className="w-full justify-start gap-4 text-xl font-black py-10 rounded-none border-b-4 border-foreground bg-secondary text-foreground hover:bg-foreground hover:text-secondary">
-                        <Ticket className="w-6 h-6" /> TIKET SAYA
+                      <Button className="w-full justify-start gap-4 text-xl font-black py-10 rounded-none border-b-4 border-foreground bg-primary text-foreground hover:bg-primary/85 hover:text-foreground">
+                        <LayoutDashboard className="w-6 h-6" /> DASHBOARD ADMIN
                       </Button>
                     </Link>
+                  )}
+                    
+                    <Link to="/my-bookings" onClick={() => setIsOpen(false)}>
+                    <Button className="w-full justify-start gap-4 text-xl font-black py-10 rounded-none border-b-4 border-foreground bg-secondary text-foreground hover:bg-secondary/85 hover:text-foreground">
+                      <Ticket className="w-6 h-6" /> TIKET SAYA
+                    </Button>
+                  </Link>
 
-                    <Button variant="destructive" className="w-full justify-start gap-4 text-xl font-black py-10 rounded-none hover:bg-foreground hover:text-destructive" onClick={handleLogout}>
+                    <Button variant="destructive" className="w-full justify-start gap-4 text-xl font-black py-10 rounded-none hover:bg-destructive/90 hover:text-destructive-foreground" onClick={handleLogout}>
                       <LogOut className="w-6 h-6" /> KELUAR AKUN
                     </Button>
                   </div>
                 ) : (
                   <Link to="/auth" onClick={() => setIsOpen(false)}>
-                    <Button className="w-full gap-4 text-2xl font-black py-12 rounded-none bg-accent text-accent-foreground hover:bg-foreground hover:text-accent flex items-center justify-center">
+                    <Button className="w-full gap-4 text-2xl font-black py-12 rounded-none bg-accent text-accent-foreground hover:bg-accent/85 hover:text-accent-foreground flex items-center justify-center">
                       <User className="w-8 h-8" />
                       LOGIN / DAFTAR
                     </Button>

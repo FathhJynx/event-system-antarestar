@@ -9,11 +9,11 @@ const buttonVariants = cva(
   {
     variants: {
       variant: {
-        default: "bg-primary text-primary-foreground shadow-neo hover:translate-x-[2px] hover:translate-y-[2px] hover:shadow-neo-sm active:translate-x-[4px] active:translate-y-[4px] active:shadow-none hover:bg-foreground hover:text-background",
-        destructive: "bg-destructive text-destructive-foreground shadow-neo hover:translate-x-[2px] hover:translate-y-[2px] hover:shadow-neo-sm active:translate-x-[4px] active:translate-y-[4px] active:shadow-none hover:bg-foreground hover:text-background",
-        outline: "bg-background shadow-neo hover:translate-x-[2px] hover:translate-y-[2px] hover:shadow-neo-sm active:translate-x-[4px] active:translate-y-[4px] active:shadow-none hover:bg-foreground hover:text-background",
-        secondary: "bg-secondary text-secondary-foreground shadow-neo hover:translate-x-[2px] hover:translate-y-[2px] hover:shadow-neo-sm active:translate-x-[4px] active:translate-y-[4px] active:shadow-none hover:bg-foreground hover:text-background",
-        ghost: "border-transparent shadow-none hover:bg-foreground hover:text-background hover:border-foreground",
+        default: "bg-primary text-primary-foreground shadow-neo hover:translate-x-[2px] hover:translate-y-[2px] hover:shadow-neo-sm active:translate-x-[4px] active:translate-y-[4px] active:shadow-none hover:bg-primary/90 hover:text-primary-foreground",
+        destructive: "bg-destructive text-destructive-foreground shadow-neo hover:translate-x-[2px] hover:translate-y-[2px] hover:shadow-neo-sm active:translate-x-[4px] active:translate-y-[4px] active:shadow-none hover:bg-destructive/90 hover:text-destructive-foreground",
+        outline: "bg-background text-foreground shadow-neo hover:translate-x-[2px] hover:translate-y-[2px] hover:shadow-neo-sm active:translate-x-[4px] active:translate-y-[4px] active:shadow-none hover:bg-muted hover:text-foreground",
+        secondary: "bg-secondary text-secondary-foreground shadow-neo hover:translate-x-[2px] hover:translate-y-[2px] hover:shadow-neo-sm active:translate-x-[4px] active:translate-y-[4px] active:shadow-none hover:bg-secondary/90 hover:text-secondary-foreground",
+        ghost: "border-transparent shadow-none hover:bg-muted hover:text-foreground hover:border-foreground",
         link: "text-foreground underline-offset-4 hover:underline border-transparent shadow-none",
       },
       size: {

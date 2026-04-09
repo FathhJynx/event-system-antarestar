@@ -1,22 +1,11 @@
 import { motion } from "framer-motion";
-import {
-  Calendar, Users, DollarSign, Ticket,
-  ArrowUp, ArrowDown, Loader2
-} from "lucide-react";
+import { Calendar, Users, DollarSign, Ticket, ArrowUp, ArrowDown, Sparkles } from "lucide-react";
 import AdminLayout from "@/components/admin/AdminLayout";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { useAdminStats, useRecentBookings, useUpcomingEventsStats, useRevenueHistory } from "@/hooks/useAdminStats";
 import { Booking } from "@/hooks/useBookings";
 import { Skeleton } from "@/components/ui/skeleton";
-import {
-  Area,
-  AreaChart,
-  ResponsiveContainer,
-  Tooltip,
-  XAxis,
-  YAxis,
-  CartesianGrid
-} from "recharts";
+import { Area, AreaChart, ResponsiveContainer, Tooltip, XAxis, YAxis, CartesianGrid } from "recharts";
 
 
 const formatCurrency = (amount: number) => {
@@ -71,14 +60,24 @@ const AdminDashboard = () => {
 
   return (
     <AdminLayout>
-      <div className="space-y-6">
-        {/* Header */}
-        <div>
-          <h1 className="font-display text-3xl">Dashboard</h1>
-          <p className="text-muted-foreground">Welcome back! Here's what's happening.</p>
-        </div>
+      <div className="space-y-8">
+        <section className="relative overflow-hidden border-4 border-foreground bg-white p-6 md:p-8 shadow-[8px_8px_0px_0px_black]">
+          <div className="absolute right-0 top-0 h-full w-1/3 bg-[#ffde03] opacity-90" />
+          <div className="relative z-10 flex flex-col lg:flex-row lg:items-end lg:justify-between gap-6">
+            <div className="max-w-2xl">
+              <p className="font-black uppercase text-[10px] tracking-[0.4em] opacity-40 mb-3">Admin Control Room</p>
+              <h1 className="font-display text-4xl md:text-6xl font-black uppercase leading-none">Dashboard</h1>
+              <p className="mt-4 max-w-xl text-sm md:text-base font-bold uppercase tracking-widest opacity-60">
+                Ringkasan operasional, booking, dan revenue dalam satu layar yang lebih jelas.
+              </p>
+            </div>
+            <div className="flex items-center gap-3 border-4 border-foreground bg-black text-white px-4 py-3 w-fit">
+              <Sparkles className="w-5 h-5 text-[#ffde03]" />
+              <span className="font-black uppercase tracking-[0.2em] text-xs">Live Overview</span>
+            </div>
+          </div>
+        </section>
 
-        {/* Stats Grid */}
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
           {statCards.map((stat, index) => (
             <motion.div
@@ -87,27 +86,22 @@ const AdminDashboard = () => {
               animate={{ opacity: 1, y: 0 }}
               transition={{ delay: index * 0.1 }}
             >
-              <Card className="stat-card">
+              <Card className="border-4 border-foreground rounded-none bg-white shadow-[6px_6px_0px_0px_rgba(0,0,0,0.08)]">
                 <CardContent className="p-6">
-                  <div className="flex items-start justify-between">
+                  <div className="flex items-start justify-between gap-4">
                     <div>
-                      <p className="text-sm text-muted-foreground">{stat.title}</p>
+                      <p className="text-[10px] uppercase tracking-[0.35em] opacity-40">{stat.title}</p>
                       {statsLoading ? (
-                        <Skeleton className="h-8 w-24 mt-1" />
+                        <Skeleton className="h-10 w-28 mt-2" />
                       ) : (
-                        <p className="text-2xl font-bold mt-1">{stat.value}</p>
+                        <p className="text-3xl font-display font-black mt-2">{stat.value}</p>
                       )}
-                      <div className={`flex items-center gap-1 mt-1 text-sm ${stat.trend === "up" ? "text-success" : "text-destructive"
-                        }`}>
-                        {stat.trend === "up" ? (
-                          <ArrowUp className="w-4 h-4" />
-                        ) : (
-                          <ArrowDown className="w-4 h-4" />
-                        )}
+                      <div className={`flex items-center gap-1 mt-2 text-sm font-black uppercase ${stat.trend === "up" ? "text-success" : "text-destructive"}`}>
+                        {stat.trend === "up" ? <ArrowUp className="w-4 h-4" /> : <ArrowDown className="w-4 h-4" />}
                         {stat.change}
                       </div>
                     </div>
-                    <div className={`w-12 h-12 rounded-xl bg-muted flex items-center justify-center ${stat.color}`}>
+                    <div className={`w-12 h-12 border-2 border-foreground flex items-center justify-center bg-[#f7f4ee] ${stat.color}`}>
                       <stat.icon className="w-6 h-6" />
                     </div>
                   </div>
@@ -117,10 +111,9 @@ const AdminDashboard = () => {
           ))}
         </div>
 
-        {/* Revenue Chart */}
-        <Card className="col-span-full">
+        <Card className="border-4 border-foreground rounded-none bg-white shadow-[8px_8px_0px_0px_rgba(0,0,0,0.08)]">
           <CardHeader>
-            <CardTitle className="font-display text-xl">Revenue Growth</CardTitle>
+            <CardTitle className="font-display text-2xl uppercase">Revenue Growth</CardTitle>
           </CardHeader>
           <CardContent className="h-[300px] w-full">
             {historyLoading ? (
@@ -130,32 +123,32 @@ const AdminDashboard = () => {
                 <AreaChart data={revenueHistory}>
                   <defs>
                     <linearGradient id="colorRevenue" x1="0" y1="0" x2="0" y2="1">
-                      <stop offset="5%" stopColor="#8884d8" stopOpacity={0.1} />
-                      <stop offset="95%" stopColor="#8884d8" stopOpacity={0} />
+                      <stop offset="5%" stopColor="#111111" stopOpacity={0.18} />
+                      <stop offset="95%" stopColor="#111111" stopOpacity={0} />
                     </linearGradient>
                   </defs>
-                  <CartesianGrid strokeDasharray="3 3" vertical={false} stroke="#333" />
+                  <CartesianGrid strokeDasharray="3 3" vertical={false} stroke="#ddd" />
                   <XAxis
                     dataKey="date"
                     axisLine={false}
                     tickLine={false}
-                    tick={{ fill: '#888', fontSize: 12 }}
+                    tick={{ fill: '#666', fontSize: 12 }}
                     dy={10}
                   />
                   <YAxis
                     axisLine={false}
                     tickLine={false}
-                    tick={{ fill: '#888', fontSize: 12 }}
+                    tick={{ fill: '#666', fontSize: 12 }}
                     tickFormatter={(value) => `Rp ${value / 1000}k`}
                   />
                   <Tooltip
-                    contentStyle={{ backgroundColor: '#111', border: '1px solid #333' }}
-                    itemStyle={{ color: '#fff' }}
+                    contentStyle={{ backgroundColor: '#fff', border: '2px solid #111', borderRadius: 0 }}
+                    itemStyle={{ color: '#111' }}
                   />
                   <Area
                     type="monotone"
                     dataKey="revenue"
-                    stroke="#8884d8"
+                    stroke="#111111"
                     fillOpacity={1}
                     fill="url(#colorRevenue)"
                     strokeWidth={2}
@@ -167,11 +160,9 @@ const AdminDashboard = () => {
         </Card>
 
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
-
-          {/* Recent Bookings */}
-          <Card>
+          <Card className="border-4 border-foreground rounded-none bg-white shadow-[8px_8px_0px_0px_rgba(0,0,0,0.08)]">
             <CardHeader>
-              <CardTitle className="font-display text-xl">Recent Bookings</CardTitle>
+              <CardTitle className="font-display text-2xl uppercase">Recent Bookings</CardTitle>
             </CardHeader>
             <CardContent>
               {bookingsLoading ? (
@@ -183,7 +174,7 @@ const AdminDashboard = () => {
               ) : recentBookings && recentBookings.length > 0 ? (
                 <div className="space-y-4">
                   {recentBookings.map((booking: Booking) => (
-                    <div key={booking.id} className="flex items-center justify-between p-3 rounded-lg bg-muted/50">
+                    <div key={booking.id} className="flex items-center justify-between p-4 border-2 border-foreground bg-[#f7f4ee]">
                       <div className="flex-1 min-w-0">
                         <p className="font-medium truncate">{booking.name}</p>
                         <p className="text-sm text-muted-foreground truncate">
@@ -192,11 +183,11 @@ const AdminDashboard = () => {
                       </div>
                       <div className="text-right ml-4">
                         <p className="font-medium">{formatCurrency(Number(booking.total))}</p>
-                        <span className={`text-xs px-2 py-0.5 rounded-full ${booking.payment_status === "success"
-                          ? "bg-success/20 text-success"
+                        <span className={`text-[10px] font-black uppercase tracking-[0.2em] px-2 py-1 border border-foreground ${booking.payment_status === "success"
+                          ? "bg-success/20"
                           : booking.payment_status === "pending"
-                            ? "bg-warning/20 text-warning"
-                            : "bg-destructive/20 text-destructive"
+                            ? "bg-warning/20"
+                            : "bg-destructive/20 text-white"
                           }`}>
                           {booking.payment_status}
                         </span>
@@ -210,10 +201,9 @@ const AdminDashboard = () => {
             </CardContent>
           </Card>
 
-          {/* Upcoming Events */}
-          <Card>
+          <Card className="border-4 border-foreground rounded-none bg-white shadow-[8px_8px_0px_0px_rgba(0,0,0,0.08)]">
             <CardHeader>
-              <CardTitle className="font-display text-xl">Upcoming Events</CardTitle>
+              <CardTitle className="font-display text-2xl uppercase">Upcoming Events</CardTitle>
             </CardHeader>
             <CardContent>
               {eventsLoading ? (
@@ -227,7 +217,7 @@ const AdminDashboard = () => {
                   {upcomingEvents.map((event) => {
                     const percentage = event.quota > 0 ? (event.registered / event.quota) * 100 : 0;
                     return (
-                      <div key={event.id} className="space-y-2">
+                      <div key={event.id} className="space-y-2 border-b border-foreground/10 pb-4 last:border-b-0 last:pb-0">
                         <div className="flex items-center justify-between">
                           <div>
                             <p className="font-medium">{event.name}</p>
